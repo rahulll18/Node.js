@@ -1,4 +1,4 @@
-console.log("server with http")
-const dirDetails = require('./pathModule')
+const mongoDb = require('./mongoDb')
 
-console.log(dirDetails);
+
+mongoDb();
