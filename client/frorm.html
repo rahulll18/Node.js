@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>form</title>
+</head>
+<body>
+    <h2>Employee register form</h2>
+    <form action="http://localhost:5000/employees/add" method="post">
+        <div>
+            <input type="text" name="emp_name" id="emp_name">
+        </div>
+        <div>
+            <input type="email" name="emp_email" id="emp_email">
+        </div>
+        <div>
+            <input type="number" name="emp_salary" id="emp_salary">
+        </div>
+        <div>
+            <input type="submit" value="send data">
+        </div>
+    </form>
+</body>
+</html>
