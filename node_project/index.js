@@ -2,12 +2,13 @@ const express = require('express')
 const app = express();
 const bodyParser = require('body-parser')
 const {getEmployee , getAllEmployees , addEmployee} = require('./api/Employeeapi')
-const {getAllUsers,getAllUserById ,deleteUsersById , updateUserwithId,addUsers} = require('./api/userApi')
+const {getAllUsers,getAllUserById ,updateUserwithId,addUsers,deleteUserById} = require('./api/userApi')
 const PORT = 5000;
 
 const mongoDb = require('./config/mongoDbb')
 const db = require("./config/mysqlDb")
 
+app.use(express.json());
 mongoDb();
 db();
 
@@ -37,6 +38,20 @@ app.post('/addUsers', parser ,async(req,res)=>{
     console.log(users);
 })
 
+app.put('/updateUser/:userId',async(req,res)=>{
+    const newUser = req.body;
+    console.log(newUser);
+    const user = await updateUserwithId(req.params.userId, newUser);
+    res.send(user);
+    console.log(user)
+})
+
+app.delete('/deleteUser/:userId' ,async function(req,res){
+
+    const deleteUser = await deleteUserById(req.params.userId);
+    res.json(deleteUser);
+    console.log(deleteUser);
+})
 
 //api with mongodb
 app.get('/employees/getEmployees' , async function(req,res){

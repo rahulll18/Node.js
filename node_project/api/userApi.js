@@ -23,9 +23,9 @@ const getAllUserById = async (id) => {
   }
 };
 
-const deleteUsersById = async (id) => {
+const deleteUserById = async (id) => {
   try {
-    const connection = connectDB();
+    const connection = await connectDB();
     const [results] = await connection.query(
       `delete from Users where userId = ${id}`
     );
@@ -88,4 +88,4 @@ async function addUsers(users) {
 }
 
 
-module.exports = {getAllUsers,getAllUserById ,deleteUsersById , updateUserwithId,addUsers}
+module.exports = {getAllUsers,getAllUserById ,updateUserwithId,addUsers,deleteUserById}
