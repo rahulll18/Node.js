@@ -13,6 +13,7 @@ mongoDb();
 db();
 
 app.use(function(req,res,next){
+    //for validation , authentication , password hashing while registering users
     console.log("middlware 1");
     next();
 })
