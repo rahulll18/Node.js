@@ -12,6 +12,11 @@ app.use(express.json());
 mongoDb();
 db();
 
+app.use(function(req,res,next){
+    console.log("middlware 1");
+    next();
+})
+
 app.get('/' , function(req,res){
     console.log(req);
     res.send("Node js ")
@@ -21,21 +26,21 @@ app.get('/' , function(req,res){
 app.get('/getAllUsers', async(req,res)=>{
     const users = await getAllUsers();
     res.send(users);
-    console.log(users);
+    //console.log(users);
 })
 
 app.get('/getAllUsers/:userId', async(req,res)=>{
     const users = await getAllUserById(req.params.userId);
     res.send(users);
-    console.log(users);
+    //console.log(users);
 })
 
-const parser = bodyParser.urlencoded({extended:true})
-app.post('/addUsers', parser ,async(req,res)=>{
+app.use(bodyParser.urlencoded({extended:true}))
+app.post('/addUsers',async(req,res)=>{
     // console.log(req.body)
     const users = await addUsers(req.body);
     res.send(users);
-    console.log(users);
+    //console.log(users);
 })
 
 app.put('/updateUser/:userId',async(req,res)=>{
@@ -43,14 +48,14 @@ app.put('/updateUser/:userId',async(req,res)=>{
     console.log(newUser);
     const user = await updateUserwithId(req.params.userId, newUser);
     res.send(user);
-    console.log(user)
+    //console.log(user)
 })
 
 app.delete('/deleteUser/:userId' ,async function(req,res){
 
     const deleteUser = await deleteUserById(req.params.userId);
     res.json(deleteUser);
-    console.log(deleteUser);
+    //console.log(deleteUser);
 })
 
 //api with mongodb
