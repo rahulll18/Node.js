@@ -2,7 +2,7 @@ const express = require('express')
 const app = express();
 const bodyParser = require('body-parser')
 const {getEmployee , getAllEmployees , addEmployee} = require('./api/Employeeapi')
-const {getAllUsers,getAllUserById ,updateUserwithId,addUsers,deleteUserById} = require('./api/userApi')
+const {getAllUsers,getAllUserById ,updateUserwithId,addUsers,deleteUserById ,updateProfilePicture} = require('./api/userApi')
 const PORT = 5000;
 
 const mongoDb = require('./config/mongoDbb')
@@ -12,11 +12,11 @@ app.use(express.json());
 mongoDb();
 db();
 
-app.use(function(req,res,next){
-    //for validation , authentication , password hashing while registering users
-    console.log("middlware 1");
-    next();
-})
+// app.use(function(req,res,next){
+//     //for validation , authentication , password hashing while registering users
+//     console.log("middlware 1");
+//     next();
+// })
 
 app.get('/' , function(req,res){
     console.log(req);
@@ -44,9 +44,16 @@ app.post('/addUsers',async(req,res)=>{
     //console.log(users);
 })
 
+app.put('/updateProfilePhoto/:userId' , async(req, res)=>{
+    const userProfile =  req.body;
+    console.log(userProfile);
+    const picture = await updateProfilePicture(req.params.userId ,userProfile);
+    res.send(picture);
+})
+
 app.put('/updateUser/:userId',async(req,res)=>{
     const newUser = req.body;
-    console.log(newUser);
+    //console.log(newUser);
     const user = await updateUserwithId(req.params.userId, newUser);
     res.send(user);
     //console.log(user)

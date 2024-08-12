@@ -42,9 +42,22 @@ const updateUserwithId = async (id, userNew) => {
       `update Users set first_name='${userNew.first_name}',last_name='${userNew.last_name}',age='${userNew.age}' where userId='${id}'`
     );
 
-    return results
+    return results;
   } catch (error) {
     console.error("Error while updating users:", error);
+  }
+};
+
+const updateProfilePicture = async (id , user)  => {
+  try{
+    const connection = await connectDB();
+    const {profilePic} = user;
+    const profilePicture = await connection.query(
+        `update Users set profiePicture='${profilePic}' where userId ='${id}'`
+    )
+    return profilePicture;
+  }catch(error){
+    console.error("Error while updating profile picture",error)
   }
 };
 
@@ -63,22 +76,25 @@ const updateUserwithId = async (id, userNew) => {
 async function addUsers(users) {
   try {
     const connection = await connectDB();
+    const {id,first_name,last_name,age ,gender,address,district,state,pincode,password,confirm_password,profilePic} = users;
+
     const response = await connection.query(
       `INSERT INTO Users 
-       (userId, first_name, last_name, age, gender, address, district, State, pincode, password, confirm_password) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       (userId, first_name, last_name, age, gender, address, district, State, pincode, password, confirm_password ,profiePicture) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?)`,
       [
-        users.id,
-        users.first_name,
-        users.last_name,
-        users.age,
-        users.gender,
-        users.address,
-        users.district,
-        users.state,
-        users.pincode,
-        users.password,
-        users.confirm_password
+        id,
+        first_name,
+        last_name,
+        age,
+        gender,
+        address,
+        district,
+        state,
+        pincode,
+        password,
+        confirm_password,
+        profilePic
       ]
     );
     return response;
@@ -88,4 +104,4 @@ async function addUsers(users) {
 }
 
 
-module.exports = {getAllUsers,getAllUserById ,updateUserwithId,addUsers,deleteUserById}
+module.exports = {getAllUsers,getAllUserById ,updateUserwithId,addUsers,deleteUserById ,updateProfilePicture}
