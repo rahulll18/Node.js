@@ -48,18 +48,20 @@ const updateUserwithId = async (id, userNew) => {
   }
 };
 
-const updateProfilePicture = async (id , user)  => {
-  try{
+const updateProfilePicture = async (id, profilePic) => {
+  try {
     const connection = await connectDB();
-    const {profilePic} = user;
-    const profilePicture = await connection.query(
-        `update Users set profiePicture='${profilePic}' where userId ='${id}'`
-    )
-    return profilePicture;
-  }catch(error){
-    console.error("Error while updating profile picture",error)
+
+    const query = `UPDATE Users SET profiePicture = ? WHERE userId = ?`;
+    const [result] = await connection.execute(query, [profilePic, id]);
+
+    return result;
+  } catch (error) {
+    console.error("Error while updating profile picture", error);
+    throw error;
   }
 };
+
 
 // async function addUsers(users) {
 //   try{
@@ -77,6 +79,7 @@ async function addUsers(users) {
   try {
     const connection = await connectDB();
     const {id,first_name,last_name,age ,gender,address,district,state,pincode,password,confirm_password,profilePic} = users;
+    
 
     const response = await connection.query(
       `INSERT INTO Users 

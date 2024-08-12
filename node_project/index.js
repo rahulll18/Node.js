@@ -3,6 +3,8 @@ const app = express();
 const bodyParser = require('body-parser')
 const {getEmployee , getAllEmployees , addEmployee} = require('./api/Employeeapi')
 const {getAllUsers,getAllUserById ,updateUserwithId,addUsers,deleteUserById ,updateProfilePicture} = require('./api/userApi')
+const upload = require('./config/multer')
+
 const PORT = 5000;
 
 const mongoDb = require('./config/mongoDbb')
@@ -37,17 +39,34 @@ app.get('/getAllUsers/:userId', async(req,res)=>{
 })
 
 app.use(bodyParser.urlencoded({extended:true}))
-app.post('/addUsers',async(req,res)=>{
-    // console.log(req.body)
-    const users = await addUsers(req.body);
-    res.send(users);
-    //console.log(users);
-})
+app.post('/addUsers', upload.single('profilePic'), async (req, res) => {
+    try {
+        // Extract the file and other user data from the request
+        const { file } = req;
+        console.log(file)
+        const profilePic = file ? file.buffer : null;
 
-app.put('/updateProfilePhoto/:userId' , async(req, res)=>{
-    const userProfile =  req.body;
-    console.log(userProfile);
-    const picture = await updateProfilePicture(req.params.userId ,userProfile);
+        const user = {
+            ...req.body,     // Spread the properties from req.body
+            profilePic       // Add the profilePic to the user object
+        };
+
+        const users = await addUsers(user);
+
+        res.send(users); // Respond with the users data
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while adding the user.');
+    }
+});
+
+
+app.put('/updateProfilePhoto/:userId' ,upload.single('profilePic') ,async(req, res)=>{
+    const { file } = req;
+    console.log(file);
+    const profilePic = file ? file.buffer : null;
+    
+    const picture = await updateProfilePicture(req.params.userId ,profilePic);
     res.send(picture);
 })
 
